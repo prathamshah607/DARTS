@@ -1,0 +1,292 @@
+======================================================================
+TIMESTEP  18  |  2026-03-22 23:40:54  |  retries=0
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H2              needs   50x medicine     (waiting 0t)
+
+DISPATCH ORDERS:
+  ORD-T018-001 [LATERAL TRANSFER]
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → DEPOT-B
+    Cargo   : medicine:40
+    Priority: critical
+    Reason  : DEPOT-B has zero medicine. Transferring 40 units from DEPOT-A.
+
+  ORD-T018-002
+    Vehicle : TRUCK-02
+    Route   : DEPOT-B → NODE-H2
+    Cargo   : medicine:40
+    Priority: critical
+    Reason  : After lateral transfer, DEPOT-B can now serve NODE-H2.
+
+SUMMARY:
+  Lateral transfer from DEPOT-A to DEPOT-B enables hospital delivery.
+
+======================================================================
+TIMESTEP   7  |  2026-03-22 23:40:54  |  retries=0
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H1              needs   40x medicine     (waiting 0t)
+  [SOS     ] NODE-D2              needs   15x mre          (waiting 1t)
+
+DISPATCH ORDERS:
+  (no orders issued)
+SUMMARY:
+  
+
+======================================================================
+TIMESTEP   7  |  2026-03-22 23:40:54  |  retries=2
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H1              needs   40x medicine     (waiting 0t)
+  [SOS     ] NODE-D2              needs   15x mre          (waiting 1t)
+
+DISPATCH ORDERS:
+  ORD-T007-001
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → NODE-H1
+    Cargo   : medicine:40
+    Priority: critical
+    Reason  : KMC Hospital flagged critical medicine shortage of 40 units. DEPOT-A holds 60 units — sufficient after this dispatch. TRUCK-01 is the only idle vehicle at DEPOT-A.
+
+  ORD-T007-002
+    Vehicle : AMB-02
+    Route   : DEPOT-B → NODE-D2
+    Cargo   : mre:15, ambulances:1
+    Priority: sos
+    Reason  : SOS signal from Gangolli coastal hamlet, 2 people isolated. AMB-02 at DEPOT-B is nearest idle ambulance at approximately 5km. Dispatching with 15 MRE from DEPOT-B stock.
+
+SUMMARY:
+  Two orders issued at T=7. Critical medicine delivery to KMC Hospital assigned to TRUCK-01 from DEPOT-A. SOS response to Gangolli hamlet assigned to AMB-02 from DEPOT-B with MRE and ambulance presence. No lateral transfers required this timestep.
+
+======================================================================
+TIMESTEP   7  |  2026-03-22 23:40:54  |  retries=0
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H1              needs   40x medicine     (waiting 0t)
+  [SOS     ] NODE-D2              needs   15x mre          (waiting 1t)
+
+DISPATCH ORDERS:
+  ORD-T007-001
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → NODE-H1
+    Cargo   : medicine:40
+    Priority: critical
+    Reason  : KMC Hospital flagged critical medicine shortage of 40 units. DEPOT-A holds 60 units — sufficient after this dispatch. TRUCK-01 is the only idle vehicle at DEPOT-A.
+
+  ORD-T007-002
+    Vehicle : AMB-02
+    Route   : DEPOT-B → NODE-D2
+    Cargo   : mre:15, ambulances:1
+    Priority: sos
+    Reason  : SOS signal from Gangolli coastal hamlet, 2 people isolated. AMB-02 at DEPOT-B is nearest idle ambulance at approximately 5km. Dispatching with 15 MRE from DEPOT-B stock.
+
+SUMMARY:
+  Two orders issued at T=7. Critical medicine delivery to KMC Hospital assigned to TRUCK-01 from DEPOT-A. SOS response to Gangolli hamlet assigned to AMB-02 from DEPOT-B with MRE and ambulance presence. No lateral transfers required this timestep.
+
+======================================================================
+TIMESTEP   7  |  2026-03-22 23:40:54  |  retries=0
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H1              needs   40x medicine     (waiting 0t)
+  [SOS     ] NODE-D2              needs   15x mre          (waiting 1t)
+
+DISPATCH ORDERS:
+  ORD-T007-001
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → NODE-H1
+    Cargo   : medicine:40
+    Priority: critical
+    Reason  : KMC Hospital flagged critical medicine shortage of 40 units. DEPOT-A holds 60 units — sufficient after this dispatch. TRUCK-01 is the only idle vehicle at DEPOT-A.
+
+  ORD-T007-002
+    Vehicle : AMB-02
+    Route   : DEPOT-B → NODE-D2
+    Cargo   : mre:15, ambulances:1
+    Priority: sos
+    Reason  : SOS signal from Gangolli coastal hamlet, 2 people isolated. AMB-02 at DEPOT-B is nearest idle ambulance at approximately 5km. Dispatching with 15 MRE from DEPOT-B stock.
+
+SUMMARY:
+  Two orders issued at T=7. Critical medicine delivery to KMC Hospital assigned to TRUCK-01 from DEPOT-A. SOS response to Gangolli hamlet assigned to AMB-02 from DEPOT-B with MRE and ambulance presence. No lateral transfers required this timestep.
+
+======================================================================
+TIMESTEP   7  |  2026-03-22 23:43:05  |  retries=0
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H1              needs   40x medicine     (waiting 0t)
+  [SOS     ] NODE-D2              needs   15x mre          (waiting 1t)
+
+DISPATCH ORDERS:
+  ORD-T007-001
+    Vehicle : AMB-02
+    Route   : DEPOT-B → NODE-D2
+    Cargo   : ambulances:1
+    Priority: sos
+    Reason  : Dispatching an ambulance from DEPOT-B to NODE-D2 to address the SOS request, as it's the only available ambulance and the request is of the highest priority.
+
+  ORD-T007-002 [LATERAL TRANSFER]
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → DEPOT-B
+    Cargo   : medicine:30
+    Priority: critical
+    Reason  : Issuing a lateral transfer from DEPOT-A to DEPOT-B to provide medicine for the critical request, as DEPOT-B has no medicine and DEPOT-A has a surplus.
+
+  ORD-T007-003
+    Vehicle : AMB-02
+    Route   : DEPOT-B → NODE-H1
+    Cargo   : medicine:10
+    Priority: critical
+    Reason  : After the lateral transfer, dispatching the ambulance from DEPOT-B to NODE-H1 with the available medicine to address the critical request.
+
+DEFERRED:
+  REQ-004 — The request for 15x mre at NODE-D2 cannot be fulfilled this timestep as the available vehicles and resources are being utilized for higher priority requests.
+
+SUMMARY:
+  This timestep, we addressed the SOS request at NODE-D2 by dispatching an ambulance from DEPOT-B. We also issued a lateral transfer from DEPOT-A to DEPOT-B to provide medicine for the critical request at NODE-H1. The request for 15x mre at NODE-D2 was deferred due to resource constraints and higher priority requests.
+
+======================================================================
+TIMESTEP   7  |  2026-03-22 23:50:18  |  retries=2
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H1              needs   40x medicine     (waiting 0t)
+  [SOS     ] NODE-D2              needs   15x mre          (waiting 1t)
+
+DISPATCH ORDERS:
+  ORD-T007-001
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → NODE-D2
+    Cargo   : mre:15
+    Priority: sos
+    Reason  : Fulfil SOS request REQ-004 with available MRE from DEPOT-A.
+
+  ORD-T007-002
+    Vehicle : AMB-02
+    Route   : DEPOT-B → NODE-H1
+    Cargo   : ambulances:1
+    Priority: critical
+    Reason  : Fulfil critical request REQ-003 by dispatching an ambulance from DEPOT-B, as no other ambulance is available and idle.
+
+DEFERRED:
+  REQ-003 — Only an ambulance can be dispatched due to the lack of available medicine at DEPOT-B and no idle ambulance at DEPOT-A or DEPOT-C with sufficient medicine.
+
+SUMMARY:
+  Issued orders to fulfil SOS request REQ-004 and partially address critical request REQ-003 by dispatching an ambulance. The request for medicine cannot be fulfilled this timestep due to the lack of available and idle vehicles with sufficient medicine.
+
+======================================================================
+TIMESTEP  18  |  2026-03-22 23:51:02  |  retries=0
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H2              needs   50x medicine     (waiting 0t)
+
+DISPATCH ORDERS:
+  ORD-T018-001
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → NODE-H2
+    Cargo   : medicine:50
+    Priority: critical
+    Reason  : Fulfilling critical request for medicine at NODE-H2 from DEPOT-A, which has sufficient medicine stock.
+
+SUMMARY:
+  Issued a critical order to fulfill the medicine request at NODE-H2 from DEPOT-A. DEPOT-A has sufficient medicine stock to fulfill this request. No lateral transfers or additional orders were necessary at this timestep.
+
+======================================================================
+TIMESTEP  30  |  2026-03-22 23:51:05  |  retries=1
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H1              needs   40x medicine     (waiting 2t)
+  [SOS     ] NODE-D3              needs   25x mre          (waiting 0t)
+
+DISPATCH ORDERS:
+  ORD-T030-001 [LATERAL TRANSFER]
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → DEPOT-C
+    Cargo   : 
+    Priority: high
+    Reason  : Lateral transfer to gather resources for future dispatches, as DEPOT-A has no medicine and DEPOT-C has some resources that could be used to fulfill critical requests.
+
+DEFERRED:
+  REQ-012 — Insufficient medicine in all depots to fulfill the critical request, and no ambulances available to dispatch.
+  REQ-013 — The only available truck is being used for a lateral transfer, and there are no other idle vehicles to dispatch to the SOS request at this time.
+
+SUMMARY:
+  This timestep, we issued a lateral transfer to gather resources. Unfortunately, we had to defer both the critical and SOS requests due to insufficient resources and vehicle availability. We will need to find a way to address these requests in the next timestep.
+
+======================================================================
+TIMESTEP  18  |  2026-03-22 23:53:05  |  retries=0
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H2              needs   50x medicine     (waiting 0t)
+
+DISPATCH ORDERS:
+  ORD-T018-001
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → NODE-H2
+    Cargo   : medicine:50
+    Priority: critical
+    Reason  : Fulfilling critical request for medicine at NODE-H2 from DEPOT-A, which has sufficient medicine stock.
+
+SUMMARY:
+  Issued a critical order to fulfill the medicine request at NODE-H2 from DEPOT-A. DEPOT-A has sufficient medicine stock to fulfill this request. No lateral transfers or additional orders were necessary at this timestep.
+
+======================================================================
+TIMESTEP  30  |  2026-03-22 23:53:10  |  retries=1
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H1              needs   40x medicine     (waiting 2t)
+  [SOS     ] NODE-D3              needs   25x mre          (waiting 0t)
+
+DISPATCH ORDERS:
+  ORD-T030-001 [LATERAL TRANSFER]
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → DEPOT-C
+    Cargo   : mre:2
+    Priority: high
+    Reason  : Lateral transfer to gather resources for future dispatches, as DEPOT-A has limited resources and DEPOT-C has some resources that can be utilized.
+
+DEFERRED:
+  REQ-012 — Insufficient medicine in all depots to fulfill the critical request. Lateral transfers and further dispatches will be needed to gather enough medicine.
+  REQ-013 — No vehicle is available to fulfill the SOS request after the lateral transfer. Further dispatches will be needed to address this request.
+
+SUMMARY:
+  This timestep, a lateral transfer was initiated to gather resources from DEPOT-A to DEPOT-C. However, a critical request and an SOS request remain unfulfilled due to insufficient resources, and further actions will be needed to address these pending requests.
+
+======================================================================
+TIMESTEP   7  |  2026-03-22 23:53:18  |  retries=0
+======================================================================
+
+SITUATION:
+  [CRITICAL] NODE-H1              needs   40x medicine     (waiting 0t)
+  [SOS     ] NODE-D2              needs   15x mre          (waiting 1t)
+
+DISPATCH ORDERS:
+  ORD-T007-001
+    Vehicle : AMB-02
+    Route   : DEPOT-B → NODE-D2
+    Cargo   : ambulances:1
+    Priority: sos
+    Reason  : AMB-02 is dispatched from DEPOT-B to NODE-D2 as an ambulance to address the SOS request, but since it's an ambulance and the request is for mre, this might not fully address the request, however, it's the most immediate action that can be taken given the available vehicles and their statuses.
+
+  ORD-T007-002
+    Vehicle : TRUCK-01
+    Route   : DEPOT-A → NODE-H1
+    Cargo   : medicine:40
+    Priority: critical
+    Reason  : TRUCK-01 is dispatched from DEPOT-A to NODE-H1 with 40 units of medicine to fulfill the critical request.
+
+DEFERRED:
+  REQ-004 — The request for 15x mre at NODE-D2 could not be fully fulfilled this timestep due to the lack of a suitable vehicle and cargo. The dispatched ambulance does not carry mre, and the only available truck was used for a critical medicine request.
+
+SUMMARY:
+  This timestep, two dispatch orders were issued to address an SOS and a critical request. An ambulance was sent to an SOS request, although it doesn't fully address the mre need, and a truck was dispatched to fulfill a critical medicine request. One request for mre remains deferred due to the limitations of available vehicles and their cargo capabilities.
+

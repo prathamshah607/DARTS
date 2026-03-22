@@ -1,0 +1,42 @@
+{
+  "timestep": 7,
+  "orders": [
+    {
+      "order_id": "ORD-T007-001",
+      "vehicle_id": "AMB-02",
+      "from_depot": "DEPOT-B",
+      "destination": "NODE-D2",
+      "cargo": {
+        "mre": 0,
+        "medicine": 0,
+        "comms": 0,
+        "ambulances": 1
+      },
+      "priority": "sos",
+      "is_lateral_transfer": false,
+      "reason": "AMB-02 is dispatched from DEPOT-B to NODE-D2 as an ambulance to address the SOS request, but since it's an ambulance and the request is for mre, this might not fully address the request, however, it's the most immediate action that can be taken given the available vehicles and their statuses."
+    },
+    {
+      "order_id": "ORD-T007-002",
+      "vehicle_id": "TRUCK-01",
+      "from_depot": "DEPOT-A",
+      "destination": "NODE-H1",
+      "cargo": {
+        "mre": 0,
+        "medicine": 40,
+        "comms": 0,
+        "ambulances": 0
+      },
+      "priority": "critical",
+      "is_lateral_transfer": false,
+      "reason": "TRUCK-01 is dispatched from DEPOT-A to NODE-H1 with 40 units of medicine to fulfill the critical request."
+    }
+  ],
+  "deferred_requests": [
+    {
+      "request_id": "REQ-004",
+      "reason": "The request for 15x mre at NODE-D2 could not be fully fulfilled this timestep due to the lack of a suitable vehicle and cargo. The dispatched ambulance does not carry mre, and the only available truck was used for a critical medicine request."
+    }
+  ],
+  "llm_summary": "This timestep, two dispatch orders were issued to address an SOS and a critical request. An ambulance was sent to an SOS request, although it doesn't fully address the mre need, and a truck was dispatched to fulfill a critical medicine request. One request for mre remains deferred due to the limitations of available vehicles and their cargo capabilities."
+}
