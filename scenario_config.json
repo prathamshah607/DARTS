@@ -1,0 +1,77 @@
+{
+  "events": [
+    {
+      "timestep": 3,
+      "type": "request",
+      "node_id": "NODE-D1",
+      "requests": [
+        { "commodity": "mre", "quantity": 40 },
+        { "commodity": "ambulances", "quantity": 1 }
+      ],
+      "urgency": "SOS"
+    },
+
+    {
+      "timestep": 7,
+      "type": "request",
+      "node_id": "NODE-H1",
+      "requests": [
+        { "commodity": "medicine", "quantity": 40 }
+      ],
+      "urgency": "critical"
+    },
+
+    {
+      "timestep": 12,
+      "type": "closure",
+      "road_id": "NH-169",
+      "reason": "flood"
+    },
+
+    {
+      "timestep": 15,
+      "type": "request",
+      "node_id": "NODE-S1",
+      "requests": [
+        { "commodity": "mre", "quantity": 80 },
+        { "commodity": "comms", "quantity": 6 }
+      ],
+      "urgency": "high"
+    },
+
+    {
+      "timestep": 18,
+      "type": "request",
+      "node_id": "NODE-H2",
+      "requests": [
+        { "commodity": "medicine", "quantity": 50 }
+      ],
+      "urgency": "critical"
+    },
+
+    {
+      "timestep": 22,
+      "type": "request",
+      "node_id": "NODE-D2",
+      "requests": [
+        { "commodity": "ambulances", "quantity": 1 }
+      ],
+      "urgency": "SOS"
+    },
+
+    {
+      "timestep": 28,
+      "type": "request",
+      "node_id": "NODE-D3",
+      "requests": [
+        { "commodity": "mre", "quantity": 50 }
+      ],
+      "urgency": "high"
+    }
+  ],
+
+  "simulation": {
+    "start": 0,
+    "end": 35
+  }
+}
