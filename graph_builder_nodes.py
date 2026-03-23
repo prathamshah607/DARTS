@@ -27,16 +27,13 @@ class Counter:
         Counter.count += 1
 
 simulation_nodes = [
-    {"id": 1, "name": "MIT Manipal", "lat": 13.3520, "lon": 74.7929},
-    {"id": 2, "name": "KMC Manipal", "lat": 13.3443, "lon": 74.7901},
-    {"id": 3, "name": "End Point", "lat": 13.3460, "lon": 74.7840},
-    {"id": 4, "name": "Udupi Krishna Temple", "lat": 13.3410, "lon": 74.7420},
-    {"id": 5, "name": "Udupi Bus Stand", "lat": 13.3389, "lon": 74.7461},
-    {"id": 6, "name": "Malpe Beach", "lat": 13.3497, "lon": 74.7012},
-    {"id": 7, "name": "Kaup Beach", "lat": 13.1967, "lon": 74.7453},
-    {"id": 8, "name": "Katapady", "lat": 13.3173, "lon": 74.7800},
-    {"id": 9, "name": "Parkala", "lat": 13.3315, "lon": 74.8012},
-    {"id": 10, "name": "Perampalli", "lat": 13.3575, "lon": 74.7680}
+    {"id": 1, "name": "DEPOT-B", "description": "Kundapur Sub Depot", "lat": 13.6316, "lon": 74.6900},
+    {"id": 2, "name": "DEPOT-C", "description": "Karkala Relief Base", "lat": 13.2143, "lon": 74.9923},
+    {"id": 3, "name": "NODE-S1", "description": "Padubidri Coastal Camp", "lat": 13.1345, "lon": 74.7732},
+    {"id": 4, "name": "NODE-S2", "description": "Brahmavar Relief Point", "lat": 13.2518, "lon": 74.7460},
+    {"id": 5, "name": "NODE-D1", "description": "Trasi Fishing Hamlet", "lat": 13.5670, "lon": 74.6925},
+    {"id": 6, "name": "NODE-D2", "description": "Gangolli Coast", "lat": 13.6500, "lon": 74.6700},
+    {"id": 7, "name": "NODE-D3", "description": "Byndoor Interior", "lat": 13.8667, "lon": 74.6333}
 ]
 
 graph = {}
@@ -181,6 +178,3 @@ for current_timestep in range(1, 30):
 
     time.sleep(1)
 
-
-
-ox.plot_graph(G)
