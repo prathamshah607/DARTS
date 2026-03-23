@@ -20,19 +20,11 @@ import osmnx as ox
 import matplotlib.patches as mpatches
 
 G=ox.graph_from_place("Udupi, Karnataka, India",network_type="drive")
-ox.save_graphml(G,"udupi_graph.graphml")
 
 class Counter:
     count = 0
     def __init__(self):
         Counter.count += 1
-
-graph={}
-def snap_node_to_graph(lat, lon, G):
-  i=Counter().count
-  node = ox.distance.nearest_nodes(G,lon,lat,return_dist=False)
-  graph[i]={"graph_node": node}
-  return node
 
 simulation_nodes = [
     {"id": 1, "name": "MIT Manipal", "lat": 13.3520, "lon": 74.7929},
@@ -47,10 +39,36 @@ simulation_nodes = [
     {"id": 10, "name": "Perampalli", "lat": 13.3575, "lon": 74.7680}
 ]
 
-nodes={}
-for i in range(1,11):
-  nodes[i]={"node_id":snap_node_to_graph(simulation_nodes[i-1]["lat"],simulation_nodes[i-1]["lon"],G)}
-nodes
+graph = {}
+
+def snap_node_to_graph(lat, lon, name, G):
+    node = ox.distance.nearest_nodes(G, lon, lat, return_dist=False)
+    return node
+
+for node in simulation_nodes:
+    graph_node_id = snap_node_to_graph(node["lat"], node["lon"], node["name"], G)
+    graph[node["id"]] = {"name": node["name"], "graph_node": graph_node_id}
+    print(f"Node {node['id']:>2} | {node['name']:<25} -> OSM node {graph_node_id}")
+
+# Tag and save once after all nodes are snapped
+for sim_id, info in graph.items():
+    nid = info["graph_node"]
+    G.nodes[nid]["simulation_id"] = sim_id
+    G.nodes[nid]["simulation_name"] = info["name"]
+
+
+print("GraphML saved with simulation node names.")
+
+nodes = {}
+for node in simulation_nodes:
+    graph_node_id = snap_node_to_graph(node["lat"], node["lon"],node["name"],G)
+    nodes[node["id"]] = {"name": node["name"], "graph_node": graph_node_id}
+    print(f"Node {node['id']:>2} | {node['name']:<25} -> OSM node {graph_node_id}")
+
+#nodes={}
+#for i in range(1,11):
+#  nodes[i]={"node_id":snap_node_to_graph(simulation_nodes[i-1]["lat"],simulation_nodes[i-1]["lon"],G)}
+#nodes
 
 nods, EDGES = ox.graph_to_gdfs(G)
 
@@ -90,6 +108,8 @@ def lift_closure(G, edge_u, edge_v):
                 G[edge_u][edge_v][key]['length'] = original_length
         else:
             G.add_edge(edge_u, edge_v, length=original_length)
+
+ox.save_graphml(G, "udupi_graph.graphml")
 
 def plot_sim(G, node_ids, closed_edges=None, timestep=None, event_desc=None):
     if closed_edges is None:
@@ -161,10 +181,6 @@ for current_timestep in range(1, 30):
 
     time.sleep(1)
 
-apply_closure(G, 13310635421, 1828385039)
-print(G[13310635421][1828385039])  # should show length: 99999999
 
-lift_closure(G, 13310635421, 1828385039)
-print(G[13310635421][1828385039])  # should restore original length
 
 ox.plot_graph(G)
