@@ -3,13 +3,7 @@ import time
 import os
 import copy
 
-# Safe import
-try:
-    from command_llm import run_command_llm
-    LLM_AVAILABLE = True
-except Exception as e:
-    print(f"[WARNING] LLM not available: {e}")
-    LLM_AVAILABLE = False
+from command_llm import run_command_llm
 
 DATA_PATH = "data/"
 SCENARIO_FILE = "scenario_config.json"
@@ -51,7 +45,13 @@ THRESHOLDS = {
 def load_vehicle_states():
     try:
         with open(DATA_PATH + "vehicle_states.json") as f:
-            return json.load(f)
+            data = json.load(f)
+
+            # FIX: extract correct format
+            if isinstance(data, dict) and "vehicles" in data:
+                return data["vehicles"]
+
+            return data
     except:
         return []
 
@@ -110,7 +110,9 @@ for timestep in range(start, end + 1):
 
     closure_events = []
 
-    # (a) Fire events
+    # ------------------------
+    # (a) Fire Events
+    # ------------------------
     for event in events:
         if event["timestep"] == timestep:
 
@@ -131,13 +133,17 @@ for timestep in range(start, end + 1):
             elif event["type"] == "closure":
                 closure_events.append(event)
 
+    # ------------------------
     # Write closure events
+    # ------------------------
     write_json(DATA_PATH + "closure_events.json", {
         "timestep": timestep,
         "closures": closure_events
     })
 
+    # ------------------------
     # (b) Write world state
+    # ------------------------
     world_state = {
         "timestep": timestep,
         "depot_inventory": copy.deepcopy(inventory),
@@ -147,28 +153,30 @@ for timestep in range(start, end + 1):
 
     write_json(DATA_PATH + "world_state.json", world_state)
 
-    # (c) Call LLM safely
+    # ------------------------
+    # (c) Call Command LLM
+    # ------------------------
     dispatch = {"orders": []}
 
-    if LLM_AVAILABLE:
-        try:
-            run_command_llm()
-            with open(DATA_PATH + "dispatch_orders.json") as f:
-                dispatch = json.load(f)
-        except Exception as e:
-            print(f"[LLM ERROR] {e}")
-            print("[FALLBACK] Using empty dispatch")
+    try:
+        run_command_llm()
+        with open(DATA_PATH + "dispatch_orders.json") as f:
+            dispatch = json.load(f)
+    except Exception as e:
+        print(f"[LLM ERROR] {e}")
+        print("[FALLBACK] Using empty dispatch")
 
-    else:
-        print("[SKIP] LLM not available")
-
-    # (d) Apply dispatch
+    # ------------------------
+    # (d) Apply dispatch → inventory
+    # ------------------------
     for order in dispatch.get("orders", []):
         depot = order["from_depot"]
         for k, v in order["cargo"].items():
             inventory[depot][k] -= v
 
+    # ------------------------
     # (e) Remove fulfilled requests
+    # ------------------------
     fulfilled_nodes = {o["destination"] for o in dispatch.get("orders", [])}
 
     pending_requests = [
@@ -176,9 +184,22 @@ for timestep in range(start, end + 1):
         if r["node_id"] not in fulfilled_nodes
     ]
 
-    # (f) Lateral transfer
+    # ------------------------
+    # (f) Run Vehicle Agent
+    # ------------------------
+    try:
+        os.system("python vehicle_agent.py")
+    except Exception as e:
+        print(f"[VEHICLE ERROR] {e}")
+
+    # ------------------------
+    # (g) Lateral transfer
+    # ------------------------
     check_lateral_transfer(inventory, pending_requests, timestep)
 
+    # ------------------------
+    # (h) Sleep
+    # ------------------------
     time.sleep(0.5)
 
 print("\nSimulation complete.")
