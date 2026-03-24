@@ -74,6 +74,13 @@ def run_timestep():
         if 'weight' in data:
             data['weight'] = float(data['weight'])
 
+    # --- NEW: Build the Name -> ID mapping layer ---
+    name_to_id = {}
+    for node, data in G.nodes(data=True):
+        if 'name' in data:
+            name_to_id[data['name']] = node
+    # -----------------------------------------------
+
     # 2. Apply current edge weights (road closures)
     current_weights = load_json(GRAPH_WEIGHTS_FILE)
     # Assuming current_weights is a dict of edge tuples to weights: {"(u, v)": 999999}
@@ -87,9 +94,6 @@ def run_timestep():
                 G[u][v]['weight'] = float(weight)
 
     # 3. Initialize fleet (Hardcoded as per specs)
-    # Note: In a real run, you'd load existing states to persist them across timesteps.
-    # For simplicity in this module draft, we establish them here. 
-    # (You would typically read vehicle_states.json first if it exists to get current positions).
     fleet = {
         "AMB-01": Vehicle("AMB-01", "DEPOT-A", "ambulance"),
         "AMB-02": Vehicle("AMB-02", "DEPOT-A", "ambulance"),
@@ -131,10 +135,14 @@ def run_timestep():
             # Need a new route if we don't have one
             if not vehicle.route:
                 try:
+                    # --- NEW: Translate string names to integer IDs for routing ---
+                    start_node_id = name_to_id.get(vehicle.position, vehicle.position)
+                    target_node_id = name_to_id.get(vehicle.destination, vehicle.destination)
+
                     vehicle.route = nx.astar_path(
                         G, 
-                        source=vehicle.position, 
-                        target=vehicle.destination, 
+                        source=start_node_id, 
+                        target=target_node_id, 
                         heuristic=lambda u, v: haversine_heuristic(u, v, G), 
                         weight='weight'
                     )
@@ -154,14 +162,18 @@ def run_timestep():
                     else:
                         edge_weight = G[vehicle.position][next_node].get('weight', 1)
                         
-                    if float(edge_weight) >= 999999: # Road is closed # Road is closed
+                    if float(edge_weight) >= 999999: # Road is closed
                         vehicle.rerouted = True
                         try:
+                            # --- NEW: Translate again for dynamic replanning ---
+                            start_node_id = name_to_id.get(vehicle.position, vehicle.position)
+                            target_node_id = name_to_id.get(vehicle.destination, vehicle.destination)
+
                             # Recalculate A* from current position
                             vehicle.route = nx.astar_path(
                                 G, 
-                                source=vehicle.position, 
-                                target=vehicle.destination, 
+                                source=start_node_id, 
+                                target=target_node_id, 
                                 heuristic=lambda u, v: haversine_heuristic(u, v, G), 
                                 weight='weight'
                             )
@@ -175,7 +187,9 @@ def run_timestep():
                     vehicle.position = vehicle.route.pop(0)
 
             # Check if arrived
-            if not vehicle.route and vehicle.position == vehicle.destination:
+            # --- NEW: Safely check arrival against the translated ID! ---
+            target_node_id = name_to_id.get(vehicle.destination, vehicle.destination)
+            if not vehicle.route and vehicle.position == target_node_id:
                 vehicle.status = "arrived"
                 vehicle.cargo = {} # Unload cargo
                 vehicle.destination = None
